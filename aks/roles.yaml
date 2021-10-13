@@ -1,0 +1,42 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: read-role
+rules:
+- apiGroups: 
+  - ""
+  - "apps"
+  resources: 
+  - "services"
+  - "endpoints"
+  - "pods"
+  # - "deployments"
+  - "secrets"
+  verbs: 
+  - get"
+  - "list"
+  - "watch"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: update-role
+rules:
+- apiGroups: 
+  - ""
+  - "apps"
+  resources: 
+  # - "services"
+  # - "endpoints"
+  - "pods"
+  # - "deployments"
+  # - "secrets"
+  verbs: ["delete"]
+
+# web-dev user 
+# (View access for API resources, 
+# Edit access for Web resources).
+
+# api-dev user 
+# (View access to Web resources, 
+# Edit access to API resources)

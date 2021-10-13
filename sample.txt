@@ -1,0 +1,39 @@
+
+PS C:\Users\ivanporta\OneDrive - Microsoft\Desktop\containers_artifacts> kubectl exec tripinsights-trips-547f45ff79-cjqpn -n api -it -- /bin/sh
+
+-------------------------------------------------------------------------
+/app # nslookup
+BusyBox v1.30.1 (2021-03-31 04:59:34 UTC) multi-call binary.
+
+Usage: nslookup HOST [DNS_SERVER]
+
+Query DNS about HOST
+/app # nslookup tripinsights-trips-service.api.svc.cluster.local
+nslookup: can't resolve '(null)': Name does not resolve
+
+Name:      tripinsights-trips-service.api.svc.cluster.local
+Address 1: 10.0.203.100 tripinsights-trips-service.api.svc.cluster.local
+
+-------------------------------------------------------------------------
+/app # nc -v tripinsights-trips-service.api.svc.cluster.local 80
+tripinsights-trips-service.api.svc.cluster.local (10.0.203.100:80) open
+GET / HTTP/1.1
+Host: tripinsights-trips-service.api.svc.cluster.local
+
+HTTP/1.1 404 Not Found
+Content-Type: text/plain; charset=utf-8
+X-Content-Type-Options: nosniff
+Date: Wed, 08 Sep 2021 16:19:12 GMT
+Content-Length: 19
+
+404 page not found
+-------------------------------------------------------------------------
+PS C:\Users\ivanporta> kubectl exec tripinsights-trips-547f45ff79-cjqpn -n api -it -- /bin/sh
+/app # curl -i -X GET 'http://localhost:80/api/trips'
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/plain; charset=utf-8
+X-Content-Type-Options: nosniff
+Date: Wed, 08 Sep 2021 16:37:24 GMT
+Content-Length: 103
+
+{"Message":"getAllTrips - Query Failed to Execute.: lookup mydrivingDB on 10.0.0.10:53: no such host"}

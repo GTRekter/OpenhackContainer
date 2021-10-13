@@ -1,0 +1,39 @@
+# GROUP WEB: 8365f7ea-c800-4590-84da-0a343589fbed 
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: api
+  name: web-read-api-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: read-role
+subjects:
+- kind: Group
+  name: 8365f7ea-c800-4590-84da-0a343589fbed
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: web
+  name: web-read-web-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: read-role
+subjects:
+- kind: Group
+  name: 8365f7ea-c800-4590-84da-0a343589fbed
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: web
+  name: web-update-web-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: update-role
+subjects:
+- kind: Group
+  name: 8365f7ea-c800-4590-84da-0a343589fbed

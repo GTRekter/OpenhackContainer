@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: api
+  name: tripinsights-trips
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tripinsights-trips
+  template:
+    metadata:
+      labels:
+        app: tripinsights-trips
+    spec:
+      containers:
+      - name: tripinsights-trips
+        image: registrygxi0879.azurecr.io/tripinsights/trips:1.0
+        ports:
+        - containerPort: 80
+        env:
+        - name: SQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_USER
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_PASSWORD
+        - name: SQL_SERVER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_SERVER
+        - name: SQL_DBNAME
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_DBNAME
+        # - name: OPENAPI_DOCS_URI
+        #   value: "sqladmin"
+        - name: DEBUG_LOGGING
+          value: "false"
+        # - name: PORT
+        #   value: "sqladmin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: api
+  name: tripinsights-trips-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: tripinsights-trips

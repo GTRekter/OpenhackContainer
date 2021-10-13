@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: api
+  name: tripinsights-userprofile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tripinsights-userprofile
+  template:
+    metadata:
+      labels:
+        app: tripinsights-userprofile
+    spec:
+      containers:
+      - name: tripinsights-userprofile
+        image: registrygxi0879.azurecr.io/tripinsights/userprofile:1.0
+        ports:
+        - containerPort: 80
+        env:
+        - name: SQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_USER
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_PASSWORD
+        - name: SQL_SERVER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_SERVER
+        - name: SQL_DBNAME
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_DBNAME
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: api
+  name: tripinsights-userprofile-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: tripinsights-userprofile

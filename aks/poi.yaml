@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: api
+  name: tripinsights-poi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tripinsights-poi
+  template:
+    metadata:
+      labels:
+        app: tripinsights-poi
+    spec:
+      containers:
+      - name: tripinsights-poi
+        image: registrygxi0879.azurecr.io/tripinsights/poi:1.0
+        ports:
+        - containerPort: 80
+        env:
+        - name: SQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_USER
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_PASSWORD
+        - name: SQL_SERVER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_SERVER
+        - name: SQL_DBNAME
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: SQL_DBNAME
+        # - name: WEB_PORT
+        #   value: 80
+        # - name: WEB_SERVER_BASE_URI
+        #   value: "sqladmin"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Local"
+        # - name: CONFIG_FILES_PATH
+        #   value: "sqladmin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: api
+  name: tripinsights-poi-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: tripinsights-poi
